@@ -15,6 +15,8 @@
      Studying delights me.  
      Roller-skating and cooking are of great fun.  
 
+
+![GitHub Streak](https://streak-stats.demolab.com?user=TwilightLemon&locale=zh_Hans)
 ## Top Apps & Project
 ::github{repo="LemonCodeTeam/Lemon-App"}
 ::github{repo="TwilightLemon/GobangCat"}
