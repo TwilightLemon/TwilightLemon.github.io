@@ -3,7 +3,7 @@ title: WPF 如何流畅地滚动ScrollViewer 简单实现下
 published: 2020-06-13
 description: 'WPF 流畅滚动ScrollViewer'
 image: ''
-tags: [WPF,.Net]
+tags: [WPF,.NET]
 category: 'WPF'
 draft: false 
 lang: ''
