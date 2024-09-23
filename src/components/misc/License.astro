@@ -1,9 +1,9 @@
 ---
-import { formatDateToYYYYMMDD } from '../../utils/date-utils'
 import { Icon } from 'astro-icon/components'
 import { licenseConfig, profileConfig } from '../../config'
-import { i18n } from '../../i18n/translation'
 import I18nKey from '../../i18n/i18nKey'
+import { i18n } from '../../i18n/translation'
+import { formatDateToYYYYMMDD } from '../../utils/date-utils'
 
 interface Props {
   title: string
@@ -25,6 +25,9 @@ const postUrl = decodeURIComponent(Astro.url.toString())
     <a href={postUrl} class="link text-[var(--primary)]">
         {postUrl}
     </a>
+    <div class="transition text-black/50 dark:text-white/50 mt-2">
+        本文同步发布于 博客园、CSDN等技术论坛  转载请保留所有信息 
+    </div>
     <div class="flex gap-6 mt-2">
         <div>
             <div class="transition text-black/30 dark:text-white/30 text-sm">{i18n(I18nKey.author)}</div>
