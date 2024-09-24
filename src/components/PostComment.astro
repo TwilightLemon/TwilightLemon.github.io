@@ -1,6 +1,10 @@
 <div id="_gisusDiv"/>
-<!--is:inline + data-astro-rerun 保证每次跳转页面都执行js生成评论框 -->>
+<!--is:inline + data-astro-rerun 保证每次跳转页面都执行js生成评论框 -->
 <script is:inline data-astro-rerun>
+    var theme=localStorage.getItem('theme')||'preferred_color_scheme';
+    if(theme==='auto')
+    theme='preferred_color_scheme';
+    console.info('theme:',theme);
     function createGiscus(){
         const script= document.createElement('script');
     script.src = 'https://giscus.app/client.js';
@@ -13,7 +17,7 @@
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'top');
-    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-theme', theme);
     script.setAttribute('data-lang', 'zh-CN');
     script.setAttribute('data-loading', 'lazy');
     script.setAttribute('crossorigin', 'anonymous');
