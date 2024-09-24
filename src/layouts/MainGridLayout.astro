@@ -3,16 +3,16 @@ import Footer from '@components/Footer.astro'
 import Navbar from '@components/Navbar.astro'
 import BackToTop from '@components/control/BackToTop.astro'
 import SideBar from '@components/widget/SideBar.astro'
-import Layout from './Layout.astro'
 import { Icon } from 'astro-icon/components'
 import { siteConfig } from '../config'
+import Layout from './Layout.astro'
 
 interface Props {
   title?: string
   banner?: string
   description?: string
   lang?: string
-  setOGTypeArticle?: boolean;
+  setOGTypeArticle?: boolean
 }
 
 const { title, banner, description, lang, setOGTypeArticle } = Astro.props

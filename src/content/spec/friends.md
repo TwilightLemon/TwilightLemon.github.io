@@ -8,9 +8,13 @@
 
 > [Jinhua Yan](https://github.com/yanjinhuagood)
 
-> [Fireasy](https://github.com/faib920)
+> [Lindexi](https://blog.lindexi.com/)
+
+> [Fireasy](http://fireasy.cn)
 
 > [WarmthDawn](https://github.com/warmthdawn)
+
+> [WhaleFall 的小站](http://whalefall.site/)
 
 ...
 </h2>
