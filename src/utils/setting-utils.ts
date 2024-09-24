@@ -26,7 +26,25 @@ export function setHue(hue: number): void {
   r.style.setProperty('--hue', String(hue))
 }
 
+function changeGiscusTheme(themeMode: LIGHT_DARK_MODE) {
+  const theme = themeMode === DARK_MODE ? 'dark' : 'light'
+  function sendMessage(message) {
+    const iframe = document.querySelector(
+      'iframe.giscus-frame',
+    ) as HTMLIFrameElement
+    if (!iframe) return
+    iframe.contentWindow?.postMessage({ giscus: message }, 'https://giscus.app')
+  }
+
+  sendMessage({
+    setConfig: {
+      theme: theme,
+    },
+  })
+}
+
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
+  let currentTheme = theme
   switch (theme) {
     case LIGHT_MODE:
       document.documentElement.classList.remove('dark')
@@ -37,11 +55,14 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
     case AUTO_MODE:
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.documentElement.classList.add('dark')
+        currentTheme = DARK_MODE
       } else {
         document.documentElement.classList.remove('dark')
+        currentTheme = LIGHT_MODE
       }
       break
   }
+  changeGiscusTheme(currentTheme)
 }
 
 export function setTheme(theme: LIGHT_DARK_MODE): void {
@@ -50,5 +71,9 @@ export function setTheme(theme: LIGHT_DARK_MODE): void {
 }
 
 export function getStoredTheme(): LIGHT_DARK_MODE {
-  return (localStorage.getItem('theme') as LIGHT_DARK_MODE) || DEFAULT_THEME
+  try {
+    return (localStorage.getItem('theme') as LIGHT_DARK_MODE) || DEFAULT_THEME
+  } catch {
+    return DEFAULT_THEME
+  }
 }
