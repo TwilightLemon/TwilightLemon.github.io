@@ -26,9 +26,15 @@ export function setHue(hue: number): void {
   r.style.setProperty('--hue', String(hue))
 }
 
+type msgForGiscus = {
+  setConfig: {
+    theme: string
+  }
+}
+
 function changeGiscusTheme(themeMode: LIGHT_DARK_MODE) {
   const theme = themeMode === DARK_MODE ? 'dark' : 'light'
-  function sendMessage(message) {
+  function sendMessage(message: msgForGiscus) {
     const iframe = document.querySelector(
       'iframe.giscus-frame',
     ) as HTMLIFrameElement
