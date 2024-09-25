@@ -14,6 +14,7 @@ import PostMetadata from '../../components/PostMeta.astro'
 import ImageWrapper from '../../components/misc/ImageWrapper.astro'
 import { profileConfig, siteConfig } from '../../config'
 import { formatDateToYYYYMMDD } from '../../utils/date-utils'
+import { statics_counter_view_js } from '../../utils/statisic-utils'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('posts', ({ data }) => {
@@ -105,9 +106,20 @@ const jsonLd = {
             <Markdown class="mb-6 markdown-content onload-animation">
                 <Content />
             </Markdown>
-
+            <!--visits -->
+            <div class="flex items-center text-50 text-sm font-medium gap-x-2">
+                <script is:inline src={statics_counter_view_js}
+                    data-articleId={entry.slug}
+                    data-elemId="[data-article-visit-count]"/>
+                <div class="meta-icon">
+                    <Icon name="material-symbols:visibility-outline" class="text-xl"></Icon>
+                </div>
+                阅读量：<span data-article-visit-count>0</span>
+            </div>
+            <!-- separator -->
+            <div class="border-[var(--line-divider)] border-dashed border-b-[1px] my-2"></div>
+            <!-- license -->
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
-
         </div>
     </div>
 

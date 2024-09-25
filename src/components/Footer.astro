@@ -1,6 +1,7 @@
 ---
 
 import { profileConfig } from '../config'
+import { statics_counter_view_js } from '../utils/statisic-utils'
 import { url } from '../utils/url-utils'
 ---
 
@@ -10,9 +11,10 @@ import { url } from '../utils/url-utils'
 <div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6">
     <div class="transition text-50 text-sm">
         总访问量：<span data-totalVisits-main>00000</span>
-        <script is:inline src="https://api.twlmgatito.cn/static/counter_view.js"
+        <script is:inline src={statics_counter_view_js}
                 data-articleId="main"
-                data-elemId="[data-totalVisits-main]"/>
+                data-elemId="[data-totalVisits-main]"
+                data-cache/>
     </div>
     <div class="transition text-50 text-sm">
         © 2017~2024 {profileConfig.name} All Rights Reserved. /
