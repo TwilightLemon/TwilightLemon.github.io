@@ -5,7 +5,7 @@ description: '材质、WindowChrome、原生DWM动画'
 image: './images/20240822-12.png'
 tags: [.NET,WPF]
 category: 'WPF'
-draft: true
+draft: false
 ---
 先看一下最终效果，左图为使用亚克力材质并添加组合颜色的效果；右图为MicaAlt材质的效果。两者都自定义了标题栏并且最大限度地保留了DWM提供的原生窗口效果（最大化最小化、关闭出现的动画、窗口阴影、拖拽布局器等）。接下来把各部分的实现一个个拆开来讲讲。
 ![](./images/20240822-1.png)
