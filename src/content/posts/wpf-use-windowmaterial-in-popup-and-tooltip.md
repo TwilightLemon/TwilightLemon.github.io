@@ -2,14 +2,16 @@
 title: WPF中为Popup和ToolTip使用WindowMaterial特效 win10/win11
 published: 2024-10-15
 description: '使用亚克力、云母材质和圆角'
-image: ''
+image: './images/20241015163410.jpg'
 tags: [WPF,.NET]
 category: 'WPF'
 draft: false 
 ---
-先看效果图：
+先看效果图：    win11:
 ![FluentToolTip](./images/20241015163410.jpg)
 ![FluentPopup](./images/20241015163626.jpg)
+win10:
+![FluentToolTip](./images/20241016231207.jpg)
 
 大致思路是：通过反射获取`Popup`内部的`原生窗口句柄`，然后通过前文已经实现的`WindowMaterial`类来应用窗口特效；对于`ToolTip`，为了保持其易用性，我使用了`附加属性+全局样式`的方式来实现，`ToolTip`也是一个特殊的`Popup`.  
 前文链接：[WPF 模拟UWP原生窗口样式——亚克力|云母材质、自定义标题栏样式、原生DWM动画 （附我封装好的类）](/posts/window-material-in-wpf)  
