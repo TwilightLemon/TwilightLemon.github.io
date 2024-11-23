@@ -1,7 +1,7 @@
 ---
 title: 无加密的机密性：Chaffing and Winnowing原理和C#实验仿真
 published: 2024-11-23
-description: '本文介绍了 Rivest 提出的 Chaffing and Winnowing 技术，该技术通过在消息中混入无关信息 (chaff) 并添加认证码 (MAC) 来实现机密性，即使在拥有所有加密密钥的“独裁者”信道中进行通信也能保证消息安全。文章详细阐述了该技术的原理、应用场景、潜在威胁以及未来研究方向，并通过实验仿真实现了整个技术流程'
+description: '本文介绍了 Rivest 提出的 Chaffing and Winnowing 技术，该技术通过在消息中混入无关信息 (chaff) 并添加认证码 (MAC) 来实现机密性，即使在拥有所有加密密钥的“独裁者”信道中进行通信也能保证消息安全。'
 image: ''
 tags: [.NET,Crypto]
 category: 'Crypto'
@@ -263,7 +263,7 @@ Console.ReadLine();
 ```cs
 Console.WriteLine("Enter packages, done with empty line:");
 List<Package> received = [];
- try
+try
 {
       while (true)
       {
@@ -325,12 +325,12 @@ Console.WriteLine("Winnowing...");
 
 　　只有完整获得包流才能解出原始信息：
 
- ![](1188749-20241123212506341-717689293)
+ ![](images/1188749-20241123212506341-717689293.jpg)
 
-:::note[MY CUSTOM TITLE]  
-注释：为了方便起见，这里没有处理原消息长度，padding产生的字节被编为乱码。  
-　　　在实际运用中，包的结构并非像实验中一样直接暴露。  
-　　　以上实验项目代码在Github上由本人公开。  
+:::note[注释]  
+为了方便起见，这里没有处理原消息长度，padding产生的字节被编为乱码。  
+在实际运用中，包的结构并非像实验中一样直接暴露。  
+以上实验项目代码在Github上由本人公开。  
 :::
 ::github{repo="TwilightLemon/TestCWCrypto"}
 
