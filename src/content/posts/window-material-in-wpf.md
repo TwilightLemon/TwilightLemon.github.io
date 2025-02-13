@@ -3,7 +3,7 @@ title: WPF 模拟UWP原生窗口样式——亚克力|云母材质、自定义�
 published: 2024-08-22
 description: '材质、WindowChrome、原生DWM动画'
 image: './images/20240822-12.png'
-tags: [.NET,WPF]
+tags: [.NET,WPF,Windows]
 category: 'WPF'
 draft: false
 ---

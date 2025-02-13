@@ -3,7 +3,7 @@ title: WPF中为Popup和ToolTip使用WindowMaterial特效 win10/win11
 published: 2024-10-15
 description: '使用亚克力、云母材质和圆角'
 image: './images/20241015163410.jpg'
-tags: [WPF,.NET]
+tags: [WPF,.NET,Windows]
 category: 'WPF'
 draft: false 
 ---

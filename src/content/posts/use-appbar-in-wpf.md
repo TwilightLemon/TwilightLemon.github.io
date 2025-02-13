@@ -3,7 +3,7 @@ title: WPF使用AppBar实现窗口停靠，适配缩放、全屏响应和多窗�
 published: 2024-09-29
 description: ''
 image: ''
-tags: [.NET,WPF]
+tags: [.NET,WPF,Windows]
 category: 'WPF'
 draft: false 
 lang: ''
