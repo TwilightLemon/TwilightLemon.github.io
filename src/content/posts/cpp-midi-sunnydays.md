@@ -3,8 +3,8 @@ title: C++ 使用MIDI库演奏《晴天》
 published: 2025-02-13
 description: '谨以此篇献给我的一位好伙伴'
 image: './images/2025213-sunnydays.jpg'
-tags: [C++]
-category: 'C++,Windows'
+tags: [C++,Windows]
+category: 'C++'
 draft: false 
 ---
 :::note[题记]
