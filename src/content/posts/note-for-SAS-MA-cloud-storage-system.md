@@ -1,5 +1,5 @@
 ---
-title: 论文笔记 《Device-Enhanced Secure Cloud Storage with Keyword Searchable Encryption and Deduplication》
+title: Note(Manuscript) for "Device-Enhanced Secure Cloud Storage with Keyword Searchable Encryption and Deduplication"
 published: 2025-02-23
 description: ''
 image: ''
@@ -7,35 +7,35 @@ tags: [Crypto]
 category: 'Crypto'
 lang: ''
 ---
-原论文地址：
+Paper reference:
 1. [Device-Enhanced Secure Cloud Storage with Keyword Searchable Encryption and Deduplication | SpringerLink](https://link.springer.com/chapter/10.1007/978-3-031-70903-6_20)
 2. [Secure Communications over Insecure Channels Based on Short Authenticated Strings | SpringerLink](https://link.springer.com/chapter/10.1007/11535218_19)
 
-# 双线性映射Bin-linear Map
+# Bin-linear Map
 
 <span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22400%22%2C%22position%22%3A%7B%22pageIndex%22%3A4%2C%22rects%22%3A%5B%5B39.40400871913795%2C212.336551831%2C385.19543709878843%2C222.428273756752%5D%2C%5B39.4025698368481%2C200.375553295%2C385.2086489790012%2C211.0848576768476%5D%2C%5B39.402826538581394%2C189.57869231754017%2C108.45759041264529%2C198.51514429687816%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22400%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=5">“Suppose that G is an additive group of prime order p and GT is a multiplicative group of the same order. A bilinear map e : G × G → GT has the following three properties”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22400%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 400</a></span>)</span>
 
-suppose e is a map, e(param\[] elements) is a function call.
+Suppose $e$ is a map, e(param\[] elements) is a function call.
 
-*   双线性This means that e respects the group operations in both groups, i.e., it is linear in both arguments. The exponents a and b act multiplicatively on the map.*此处的映射定义为加法群到乘法群*
+*   Bio-linearThis means that e respects the group operations in both groups, i.e., it is linear in both arguments. The exponents a and b act multiplicatively on the map.
 
-*   $  e(Q,R) != 1, for\; all\; Q,R∈G, Q!=R  $1 denotes UNIT Element in Multiplicative Group
+*   $  e(Q,R) \neq 1, for\; all\; Q,R∈G, Q \neq R  $, where 1 denotes `UNIT Element` in Multiplicative Group.
 
-*   e 便于计算 ??
+*   e is effective to calcutale.
 
 # MLE
 ~~不用说懂得都懂~~
 # SAS-MA
 
-including 2 channels:
+Including 2 channels:
 
-*   open channel<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22401%22%2C%22position%22%3A%7B%22pageIndex%22%3A5%2C%22rects%22%3A%5B%5B285.1118094399563%2C545.9691749927056%2C399.444596736801%2C554.9056269720436%5D%2C%5B53.57700598028832%2C534.0170440678318%2C399.4107235783859%2C542.9534960471698%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=6">“allows for transmission of messages of arbitrary length, but is subject to man-in-the-middle adversaries.”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 401</a></span>)</span> 允许传输任意长度的消息，但受制于中间人对手。
+*   open channel<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22401%22%2C%22position%22%3A%7B%22pageIndex%22%3A5%2C%22rects%22%3A%5B%5B285.1118094399563%2C545.9691749927056%2C399.444596736801%2C554.9056269720436%5D%2C%5B53.57700598028832%2C534.0170440678318%2C399.4107235783859%2C542.9534960471698%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=6">“allows for transmission of messages of arbitrary length, but is subject to man-in-the-middle adversaries.”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 401</a></span>)</span> Allow any $\{0,1\}^*$ messages; affacted by Man-in-the-middle Attack.
 
-*   SAS channel<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22401%22%2C%22position%22%3A%7B%22pageIndex%22%3A5%2C%22rects%22%3A%5B%5B100.78179613468113%2C522.064913142958%2C361.072694015414%2C532.98743%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=6">“allows for transmission of up to t′-bit (e.g., 20-bit) messages”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 401</a></span>)</span> 允许传输高达 t′ 位（例如 20 位）的消息
+*   SAS channel<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22401%22%2C%22position%22%3A%7B%22pageIndex%22%3A5%2C%22rects%22%3A%5B%5B100.78179613468113%2C522.064913142958%2C361.072694015414%2C532.98743%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=6">“allows for transmission of up to t′-bit (e.g., 20-bit) messages”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22401%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 401</a></span>)</span> Allows for any $\{0,1\}^{t'}$ messages.(t' is a short interger, e.g. 20)
 
-“commitment“ is more alike a hash sign of Message m for authentication
+“commitment“ is more alike a Hash sign of Message m for authentication.
 
-# 威胁模型
+# Threat Model
 
 *   CS \ KS:  compromised<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22402%22%2C%22position%22%3A%7B%22pageIndex%22%3A6%2C%22rects%22%3A%5B%5B180.2653873864164%2C218.70994444120265%2C385.22794465299063%2C227.64639642054064%5D%2C%5B39.40319356190381%2C206.74884717655024%2C385.25783275250546%2C215.68529915588823%5D%2C%5B39.40319356190381%2C194.79671625167646%2C385.27178017554456%2C203.73316823101445%5D%2C%5B39.40319356190381%2C182.83561898702405%2C217.14593540814747%2C191.77207096636204%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22402%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=7">“An honest-but-curious cloud server may compromise the key servers to launch offline brute-force attacks and offline KGA against files and keywords, respectively. The number of compromised key servers is assumed to be less than the threshold.”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22402%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 402</a></span>)</span>
 
@@ -95,15 +95,15 @@ prepare(input): 安全参数K, 大素数p, KS index 1\~n, threshold t.
 
 > P是 Zp\*的生成元
 
-1.  for every KS\_i: , $$b_{i,0} \xleftarrow{\text\$} Z^*_p$$    $f_i(x) = poly_x: b_{i,(0~t)}$
+1.  for every $KS_i$: , $$b_{i,0} \xleftarrow{\text\$} Z^*_p$$    $f_i(x) = poly_x: b_{i,(0~t)}$
 
-2.  for every KS\_i: 计算$b_{i,(0~t-1)} \cdot P$  并公开，send $f_i(j)$  to every $KS_j$now, for all $KS_i$  owns all KS’s $b_{(index),(range: t)} \cdot P$> $b_{i,i} \cdot P$ ：目的是盲化$b_i$
-    >
+2.  for every $KS_i$: 计算$b_{i,(0~t-1)} \cdot P$  并公开，send $f_i(j)$  to every $KS_j$ now, for all $KS_i$  owns all KS's $b_{(index),(range: t)} \cdot P$> $b_{i,i} \cdot P$ ：目的是盲化$b_i$
     > threshold参数在$poly_x$上体现，只需要t个KS协作即可完成认证
 
 3.  all trusted KS verifies: $  f_j(para: index)\cdot P == \sum_{n=0}^{t-1}{i^n \cdot b_{j,n}}  $> 确保得到的$b_i$与$KS_i$所声明的一致（在KS群中保持一致，不可能存在一个腐败的KS，除非所有KS都欺骗Server）
 
-4.  $KS_i$: 计算 $s_i = \sum_{q=1}^n{f_q(para:i)}$$PK_i$ = $s_i \cdot P$  \\\升阶(群内)盲化
+4.  $KS_i$: 计算 $s_i = \sum_{q=1}^n{f_q(para:i)}$  
+    $PK_i$ = $s_i \cdot P$ \\\升阶(群内)盲化
 
 5.  for all KS: 协商获得 pk:  $PK=\sum_{q=1}^{n}{b_{q,0} \cdot P}$
 
@@ -135,11 +135,15 @@ $$
 
 prepare: File M and its Keywords {w\_j} T=|{wj}|
 
-1.  $$r' \; and \; \{r_j\}: \; size\; of\; T\; \xleftarrow{\text{\$}} Z^*_p $$$M’ = r’ \cdot H(M)$    文件HASH盲化$w’_j=r_j \cdot H(w_j)$   Keyword hash盲化
+1.  $$
+    r' \; and \; \{r_j\} \xleftarrow{\text{\$}} Z^*_p \;,\; T=|\{r_j\}|
+    $$
+    $M’ = r’ \cdot H(M)$    文件HASH盲化  
+    $w’_j=r_j \cdot H(w_j)$   Keyword hash盲化
 
 2.  共享 M’ 与  $\{w’_j\}$  with All KS
 
-3.  for KS\_i: Sign “the signatures  $σ'_i = α_i \cdot M′\; and \; δ_{i′,j} = β_i · w′_j \; for \; j = 1, 2, · · · , T .$   These signatures will be transmitted to S”
+3.  for $KS_i$: Sign “the signatures  $σ'_i = α_i \cdot M' \; and \; δ_{i',j} = β_i · w'_j \; for \; j = 1, 2, · · · , T .$   These signatures will be transmitted to S”
 
 4.  Server verifies signs
 
@@ -147,7 +151,6 @@ prepare: File M and its Keywords {w\_j} T=|{wj}|
     e(σ’_i,P)==e(M’,Vi)\; and \; e(δ’_{i,j},P) ==e(w’_j,Q_i)
     $$
 
-kw: BLS signature \ Lagrange interpolation
 
 ***
 
@@ -208,7 +211,8 @@ $$
 e(H(m),P) = e(H(m),G)^x
 $$
 
-**拉格朗日插值（Lagrange Interpolation）** 是一种多项式插值方法，用于通过已知的离散数据点（$x_i, y_i$​）构建一个多项式，该多项式通过这些数据点。具体来说，给定 n+1 个数据点 $(x_0, y_0), (x_1, y_1), \dots, (x_n, y_n)$，拉格朗日插值通过构造一个多项式 L(x)，使得：
+### 拉格朗日插值（Lagrange Interpolation）
+是一种多项式插值方法，用于通过已知的离散数据点（$x_i, y_i$​）构建一个多项式，该多项式通过这些数据点。具体来说，给定 n+1 个数据点 $(x_0, y_0), (x_1, y_1), \dots, (x_n, y_n)$，拉格朗日插值通过构造一个多项式 L(x)，使得：
 
 $$
 L(x_i) = y_i, \quad \forall i = 0, 1, \dots, n
@@ -247,13 +251,12 @@ $$
 3.  加密server-derived keywords , ξj 从Zp\*中随机选取：
 
     $$
-    C_{sdk_wj} = (\xi_j \cdot P, h_x(\tau_j))
+    C_{sdk_wj} = (\xi_j \cdot P, h_2(\tau_j))
     $$
 
 
-
     $$
-    where, \tau_j = e(H(sdk_wk,\xi_j \cdot \Gamma))
+    where, \tau_j = e(H(sdk_{w_k},\xi_j \cdot \Gamma))
     $$
 
 OUT SOURCE: $C_M$ , $C_(ek_M)$, ${C_(sdk_wj)}$ for j∈\[T]
@@ -288,7 +291,7 @@ $$
     盲化 pw'=r \cdot H(pw), \; Com=h_3(pw' || R_c||z)
     $$
 
-
+    $$ pw'\; and  \;Com → D $$
 
     $$
     D: R_D ∈ \{0,1\}^{t'} → Client
@@ -332,10 +335,10 @@ $$
 
     > 即得到私钥 $\gamma = h_4(k \cdot H(pw) || pw )$
 
-### Kw Search
+### Keyword Search
 
 > $$
-> input:\; keyword
+> input:\; keyword \;w^*
 > $$
 
 1.  Client interacts with KS to blinds w\*, r\*∈Zp\*
@@ -371,7 +374,7 @@ $$
 4.  $T_{sdk_{w^*}} = \gamma \cdot H(sdk_{w^*})$   send to CS
 
 5.  query  $L_R$  for  $C_{sdk_w} =(A,B)$ \
-    verify  $h_2(e(T_{sdk_{w^*}},A)) == B$ \
+    verify  $h_2(e(T_{sdk_{w^*}},A)) == B$, where A is randomly selected by CS \
     send (enc)MLE Key $C_{ek_M}$   (and  $C_M$  ?) to C
 
 ### Decryption
