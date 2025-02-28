@@ -383,3 +383,38 @@ $ek_M = PKDec(\gamma,C_{ek_M}) → MLE \; Key$
 
 $ decrypts \; M=SDec(e_{k_M},C_M)$
 
+# Security Proof
+
+## 定理1. 如果使用盲BLS签名和SAS-MA，则DULCET是抗中间人攻击的
+
+<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22407%22%2C%22position%22%3A%7B%22pageIndex%22%3A11%2C%22rects%22%3A%5B%5B53.57699376294341%2C259.905737135855%2C399.433624012411%2C268.83222651543906%5D%2C%5B53.57699376294341%2C247.95360621098123%2C399.4027414712745%2C256.88009559056525%5D%2C%5B53.57699376294341%2C235.5740797566608%2C399.4024889076054%2C247.64235256299997%5D%2C%5B53.57774110636814%2C223.62231313662616%2C285.8597394107797%2C233.58491289062619%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22407%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=12">“Theorem 1. Assuming the blind BLS signature is of blindness and the short authentication string message authentication (SAS-MA) is secure, DULCET prevents a man-in-the-middle adversary A (e.g., CS∗) from learning the receiver R’s password-derived private key γ and password pw.”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22407%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 407</a></span>)</span>
+
+security provided by:
+
+$$
+private-key: \; \gamma = h_4(v||pw)
+$$
+
+$$
+v= k \cdot H(pw)
+$$
+
+$$
+where \; k \xleftarrow{\text{\$}} Z^*_p \; in \; trusted \; device
+$$
+
+Blinded BLS signature & SAS-MA 保证k只在device中派生，不在任何信道中显式传输，对于一个外部敌手只能获得公钥并通过DGA来匹配pw：
+
+$$
+public-key: \; \Gamma = \gamma \cdot P
+$$
+
+## 定理2. 对于所有PPT敌手，DULCET是不可预测的
+
+<span class="highlight" data-annotation="%7B%22attachmentURI%22%3A%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FA54BVCMA%22%2C%22pageLabel%22%3A%22408%22%2C%22position%22%3A%7B%22pageIndex%22%3A12%2C%22rects%22%3A%5B%5B39.40187341822877%2C425.9870362459722%2C385.23160427594865%2C435.9496359999722%5D%2C%5B39.4018715352974%2C414.0349053210984%2C337.14611965246513%2C423.9975050750984%5D%5D%7D%2C%22citationItem%22%3A%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22408%22%7D%7D" ztype="zhighlight"><a href="zotero://open/library/items/A54BVCMA?page=13">“Theorem 2. DULCET is of unpredictability if for any PPT adversary A, the advantage of A winning the unpredictability experiment is negligible.”</a></span> <span class="citation" data-citation="%7B%22citationItems%22%3A%5B%7B%22uris%22%3A%5B%22http%3A%2F%2Fzotero.org%2Fusers%2F16470860%2Fitems%2FJH5RQ343%22%5D%2C%22locator%22%3A%22408%22%7D%5D%2C%22properties%22%3A%7B%7D%7D" ztype="zcitation">(<span class="citation-item"><a href="zotero://select/library/items/JH5RQ343">Jiang et al., 2024, p. 408</a></span>)</span>
+
+在分布式密钥协商中，敌手最多能收集到t-1个子密钥(threshold t)
+
+### $ Exp^{UDP}_{A,DULCET}(1^{\lambda}) $
+...
+
