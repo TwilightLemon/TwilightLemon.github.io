@@ -74,6 +74,7 @@ export type BlogPostData = {
   published: Date
   description: string
   tags: string[]
+  topmost?:boolean
   draft?: boolean
   image?: string
   category?: string

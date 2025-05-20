@@ -10,9 +10,10 @@ interface Props {
   published: Date
   tags: string[]
   category: string
+  topmost?: boolean
   hideTagsForMobile?: boolean
 }
-const { published, tags, category, hideTagsForMobile = false } = Astro.props
+const { published, tags, category, hideTagsForMobile = false,topmost } = Astro.props
 const className = Astro.props.class
 ---
 <div class:list={["flex flex-wrap text-neutral-500 dark:text-neutral-400 items-center gap-4 gap-x-4 gap-y-2", className]}>
@@ -23,6 +24,14 @@ const className = Astro.props.class
         </div>
         <span class="text-50 text-sm font-medium" data-article-visit-count>0</span>
     </div> -->
+
+    <!-- topmost -->
+    {topmost && <div class="flex items-center">
+        <div class="meta-icon">
+            <Icon name="material-symbols:arrow-upward-rounded" class="text-xl"></Icon>
+        </div>
+         <span class="text-50 text-sm font-medium">已置顶</span>
+    </div>}
     <!-- publish date -->
     <div class="flex items-center">
         <div class="meta-icon"
