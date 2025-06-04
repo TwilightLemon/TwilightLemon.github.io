@@ -176,15 +176,46 @@ private void StopRendering()
 }
 ```
 
+## 2.4 处理来自外部的滚动
+我们的模型在计算时独立于ScrollViewer的实际滚动位置，当用户通过直接滑动滚动条或者使用`ListBox.ScrollIntoView`等方法时，我们需要同步滚动位置。这里采用的方法是使用`DependencyPropertyDescriptor`监听`ScrollViewer.VerticalOffset`(只读依赖属性)的变化，并在变化时判断是否更新内部滚动位置。
+```csharp
+//注册监听
+DependencyPropertyDescriptor
+    .FromProperty(VerticalOffsetProperty, typeof(ScrollViewer))
+    .AddValueChanged(this, HandleExternalScrollChanged);
+//Unload中取消注册
+DependencyPropertyDescriptor
+    .FromProperty(VerticalOffsetProperty, typeof(ScrollViewer))
+    .RemoveValueChanged(this, HandleExternalScrollChanged);
+//...
+private bool _isInternalScrollChange = false;
+private void HandleExternalScrollChanged(object? sender, EventArgs e)
+{
+    if (!_isInternalScrollChange)
+        _currentOffset = VerticalOffset;
+}
+```
+我们使用一个标志位来判断是否是内部滚动导致的变化，以避免循环调用。则在处理模型时需要设置该标志位为`true`，在滚动结束后再将其重置为`false`，在`OnRender`中调用内部滚动方法：
+```csharp
+private void InternalScrollToVerticalOffset(double offset)
+{
+    _isInternalScrollChange = true;
+    ScrollToVerticalOffset(offset);
+    _isInternalScrollChange = false;
+}
+```
+
 # 三、已知问题
-1. 使用触摸屏时可能会造成闪烁，因为并没有完全禁用系统的滚动实现。如果禁用`base.OnManipulationDelta(e)`，则无法触发`ManipulationCompleted`事件，导致无法处理惯性滚动。
-2. 尚未测试与ListBox等控件的兼容性。
+1. 使用触摸屏时可能会造成闪烁，因为并没有完全禁用系统的滚动实现。如果禁用`base.OnManipulationDelta(e)`，则无法触发`ManipulationCompleted`事件，导致无法处理惯性滚动。 
+2. ~~尚未测试与ListBox等控件的兼容性。~~
 
 # 四、完整代码
 以下是完整的`MyScrollViewer`代码，包含了上述所有实现细节。
 ```csharp
 using EleCho.WpfSuite;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -225,6 +256,12 @@ public class MyScrollViewer : ScrollViewer
         this.PanningDeceleration = 0; // 禁用默认惯性
 
         StylusTouchDevice.SetSimulate(this, true);
+
+        DependencyPropertyDescriptor
+                .FromProperty(VerticalOffsetProperty, typeof(ScrollViewer))
+                .AddValueChanged(this, HandleExternalScrollChanged);
+
+        Unloaded += ScrollViewer_Unloaded;
     }
     //记录参数
     private int _lastScrollingTick = 0, _lastScrollDelta = 0;
@@ -233,6 +270,32 @@ public class MyScrollViewer : ScrollViewer
     //标志位
     private bool _isRenderingHooked = false;
     private bool _isAccuracyControl = false;
+    private bool _isInternalScrollChange = false;
+
+    private void ScrollViewer_Unloaded(object sender, RoutedEventArgs e)
+    {
+        DependencyPropertyDescriptor
+            .FromProperty(VerticalOffsetProperty, typeof(ScrollViewer))
+            .RemoveValueChanged(this, HandleExternalScrollChanged);
+
+        if (_isRenderingHooked)
+        {
+            CompositionTarget.Rendering -= OnRendering;
+            _isRenderingHooked = false;
+        }
+    }
+
+    /// <summary>
+    /// 处理外部滚动事件，更新当前偏移量
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void HandleExternalScrollChanged(object? sender, EventArgs e)
+    {
+        if (!_isInternalScrollChange)
+            _currentOffset = VerticalOffset;
+    }
+
     protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
     {
         base.OnManipulationDelta(e);    //如果没有这一行则不会触发ManipulationCompleted事件??
@@ -329,7 +392,14 @@ public class MyScrollViewer : ScrollViewer
             _currentOffset = Math.Clamp(_currentOffset + _targetVelocity * (1.0 / 60), 0, ScrollableHeight);
         }
 
-        ScrollToVerticalOffset(_currentOffset);
+        InternalScrollToVerticalOffset(_currentOffset);
+    }
+
+    private void InternalScrollToVerticalOffset(double offset)
+    {
+        _isInternalScrollChange = true;
+        ScrollToVerticalOffset(offset);
+        _isInternalScrollChange = false;
     }
 
     private void StopRendering()
@@ -338,4 +408,5 @@ public class MyScrollViewer : ScrollViewer
         _isRenderingHooked = false;
     }
 }
+
 ```
