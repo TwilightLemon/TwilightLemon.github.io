@@ -1,6 +1,6 @@
 ---
 title: WPF 使用CompositionTarget.Rendering实现平滑流畅滚动的ScrollViewer，支持滚轮、触控板、触摸屏和笔
-published: 2025-06-03
+published: 2025-11-08
 description: ''
 image: ''
 tags: [WPF,.NET]
@@ -41,14 +41,26 @@ lang: ''
 ### 1.3.1 缓动滚动模型
 类似于鞭挞陀螺使其旋转，每打一次都会给陀螺附加新的加速度，然后在接下来的时间中由于摩擦的存在而缓慢减速。我们基于这个思路来实现简易的缓动滚动模型：  
 
-1. 先定义几个参数：速率v、衰减系数f、叠加速率力度系数n,假设刷新率是60Hz，则每帧的时间间隔`deltaTime = 1/60s`(因为只是模拟数据，实际上并不会影响滚动的流畅度)
-2. 每次OnMouseWheel事件触发时，计算新的速率：`v += e.Delta * n`
-3. 更新速率：`v *= f`，模拟摩擦力的影响
-4. 在`CompositionTarget.Rendering`事件中，计算新的位置：`offset += v * deltaTime`
-5. 将新的位置应用到ScrollViewer上
+1. 先定义几个常量：衰减系数`f=0.92`、叠加速率力度系数`n=2.0`、目标帧时间`frameTime=1.0/144`以及行进常量`p=24`
+2. 每次`OnMouseWheel`事件触发时，叠加速率：`v += e.Delta * n`
+3. 在`CompositionTarget.Rendering`事件中：
+    - 计算刷新间隔时间`Δt`，以按照间隔时间计算滚动增量
+    - `t= Δt / frameTime`
+    - `v *= f^t`，模拟摩擦力的影响（确保在目标帧时间内衰减幅度一致）  
+    - `offset += v *(t/p)`，计算滚动增量  
+4. 将新的位置应用到ScrollViewer上
+
+调整以上参数会带来相应的变化：
+- 衰减系数f越小，滚动越快停下来
+- 叠加速率力度系数n越大，每次滚动的速度越快
+- 行进常量p越大，滚动越慢
+- 通常你无需调整frameTime，它只是用来标准化滚动速度的
 
 ### 1.3.2 精确滚动模型
 对于一个指定的滚动距离，我们希望能够精确地滚动到目标位置，而不是依赖于速率和衰减。模型只需要对离散距离补帧即可。具体而言，定义一个插值系数l，指示接近目标位置的速率，则`offset=_targetOffset - _currentOffset) *l`.
+
+### 2025/11/08 更新
+因为`CompositionTarget.Rendering`事件的触发频率并不固定，可能会因为系统负载等原因而变化较大，因此在计算滚动增量时需要考虑实际的时间增量。
 
 # 二、实现
 现在我们已经有思路了：先捕获`OnMouseWheel`等事件->判断使用哪个模型->挂载`OnRender`事件->在每一帧中计算新的滚动位置->应用到ScrollViewer上。以下实现通过继承`ScrollViewer`创建新的控件来实现。
@@ -64,7 +76,10 @@ lang: ''
      _isAccuracyControl = IsTouchpadScroll(e);
 
      if (_isAccuracyControl)
-         _targetOffset = Math.Clamp(_currentOffset - e.Delta, 0, ScrollableHeight);
+         {
+            _targetVelocity = 0; // 防止下一次触发缓动模型时继承没有消除的速度，造成滚动异常
+            _targetOffset = Math.Clamp(_currentOffset - e.Delta, 0, ScrollableHeight);
+        }
      else
          _targetVelocity += -e.Delta * VelocityFactor;// 鼠标滚动，叠加速度（惯性滚动）
 
@@ -89,7 +104,7 @@ private bool IsTouchpadScroll(MouseWheelEventArgs e)
     }
 ```
 
-## 2.2 适配触摸屏和笔
+## 2.2 适配触摸屏和笔（更新：不建议使用）
 触摸屏的输入可以通过`ManipulationDelta`和`ManipulationCompleted`事件来处理。我们将触摸输入映射为滚动偏移量，并使用精确滚动模型，在结束滚动时，可能还有由于快速滑动造成的惯性速率，我们在`ManipulationCompleted`中交给惯性滚动模型处理。
 ```csharp
 protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
@@ -140,10 +155,18 @@ public MyScrollViewer()
 ```csharp
 private void OnRendering(object? sender, EventArgs e)
 {
+    // 计算时间增量
+    long currentTimestamp = Stopwatch.GetTimestamp();
+    double deltaTime = (double)(currentTimestamp - _lastTimestamp) / Stopwatch.Frequency;
+    _lastTimestamp = currentTimestamp;
+
+    double timeFactor = deltaTime / TargetFrameTime;
+
     if (_isAccuracyControl)
     {
-        // 精确滚动：Lerp 逼近目标
-        _currentOffset += (_targetOffset - _currentOffset) * LerpFactor;
+        // 精确滚动：Lerp 逼近目标（使用时间因子调整）
+        double lerpAmount = 1.0 - Math.Pow(1.0 - LerpFactor, timeFactor);
+        _currentOffset += (_targetOffset - _currentOffset) * lerpAmount;
 
         // 如果已经接近目标，就停止
         if (Math.Abs(_targetOffset - _currentOffset) < 0.5)
@@ -154,7 +177,7 @@ private void OnRendering(object? sender, EventArgs e)
     }
     else
     {
-        // 缓动滚动：速度衰减模拟
+        // 缓动滚动：速度衰减模拟（使用时间因子调整）
         if (Math.Abs(_targetVelocity) < 0.1)
         {
             _targetVelocity = 0;
@@ -162,17 +185,14 @@ private void OnRendering(object? sender, EventArgs e)
             return;
         }
 
-        _targetVelocity *= Friction;
-        _currentOffset = Math.Clamp(_currentOffset + _targetVelocity * (1.0 / 60), 0, ScrollableHeight);
+        // 使用时间因子调整摩擦力衰减
+        _targetVelocity *= Math.Pow(Friction, timeFactor);
+
+        // 根据实际时间计算偏移量
+        _currentOffset = Math.Clamp(_currentOffset + _targetVelocity * (timeFactor / 24), 0, ScrollableHeight);
     }
 
-    ScrollToVerticalOffset(_currentOffset);
-}
-
-private void StopRendering()
-{
-    CompositionTarget.Rendering -= OnRendering;
-    _isRenderingHooked = false;
+    InternalScrollToVerticalOffset(_currentOffset);
 }
 ```
 
@@ -206,7 +226,7 @@ private void InternalScrollToVerticalOffset(double offset)
 ```
 
 # 三、已知问题
-1. 使用触摸屏时可能会造成闪烁，因为并没有完全禁用系统的滚动实现。如果禁用`base.OnManipulationDelta(e)`，则无法触发`ManipulationCompleted`事件，导致无法处理惯性滚动。 
+1. 使用触摸屏时可能会造成闪烁，因为并没有完全禁用系统的滚动实现。但是如果禁用`base.OnManipulationDelta(e)`，则无法触发`ManipulationCompleted`事件，导致无法处理惯性滚动。 
 2. ~~尚未测试与ListBox等控件的兼容性。~~
 
 # 四、完整代码
@@ -220,53 +240,52 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace FluentScrollViewer;
-
-public class MyScrollViewer : ScrollViewer
+public class MyScrollViewer : System.Windows.Controls.ScrollViewer
 {
+    #region 模型参数
     /// <summary>
-    /// 精确滚动模型，指定目标偏移
+    /// 缓动模型的叠加速度力度，数值越大，滚动起始速率越快，滚得越远
     /// </summary>
-    private double _targetOffset = 0;
+    private const  double VelocityFactor = 2.0;
     /// <summary>
-    /// 缓动滚动模型，指定目标速度
+    /// 缓动模型的速度衰减系数，数值越小，越快停下来
     /// </summary>
-    private double _targetVelocity = 0;
-
-    /// <summary>
-    /// 缓动模型的叠加速度力度
-    /// </summary>
-    private const double VelocityFactor = 1.2;
-    /// <summary>
-    /// 缓动模型的速度衰减系数，数值越小，滚动越慢
-    /// </summary>
-    private const double Friction = 0.96;
+    private const double Friction = 0.92;
 
     /// <summary>
     /// 精确模型的插值系数，数值越大，滚动越快接近目标
     /// </summary>
-    private const double LerpFactor = 0.35;
+    private const double LerpFactor = 0.5;
+
+    /// <summary>
+    /// 目标帧时间
+    /// </summary>
+    private const double TargetFrameTime =1.0d/144;
+    #endregion
 
     public MyScrollViewer()
     {
         _currentOffset = VerticalOffset;
 
-        this.IsManipulationEnabled = true;
         this.PanningMode = PanningMode.VerticalOnly;
-        this.PanningDeceleration = 0; // 禁用默认惯性
-
-        StylusTouchDevice.SetSimulate(this, true);
+        //使用此触屏滚动会导致闪屏，先不用了..
+        // this.IsManipulationEnabled = true;
+        // this.PanningDeceleration = 0; // 禁用默认惯性
+        //StylusTouchDevice.SetSimulate(this, true);
 
         DependencyPropertyDescriptor
-                .FromProperty(VerticalOffsetProperty, typeof(ScrollViewer))
+                .FromProperty(VerticalOffsetProperty, typeof(System.Windows.Controls.ScrollViewer))
                 .AddValueChanged(this, HandleExternalScrollChanged);
 
         Unloaded += ScrollViewer_Unloaded;
     }
     //记录参数
     private int _lastScrollingTick = 0, _lastScrollDelta = 0;
-    private double _lastTouchVelocity = 0;
+    //private double _lastTouchVelocity = 0;
     private double _currentOffset = 0;
+    private double _targetOffset = 0;
+    private double _targetVelocity = 0;
+    private long _lastTimestamp = 0;
     //标志位
     private bool _isRenderingHooked = false;
     private bool _isAccuracyControl = false;
@@ -275,7 +294,7 @@ public class MyScrollViewer : ScrollViewer
     private void ScrollViewer_Unloaded(object sender, RoutedEventArgs e)
     {
         DependencyPropertyDescriptor
-            .FromProperty(VerticalOffsetProperty, typeof(ScrollViewer))
+            .FromProperty(VerticalOffsetProperty, typeof(System.Windows.Controls.ScrollViewer))
             .RemoveValueChanged(this, HandleExternalScrollChanged);
 
         if (_isRenderingHooked)
@@ -296,19 +315,20 @@ public class MyScrollViewer : ScrollViewer
             _currentOffset = VerticalOffset;
     }
 
-    protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
+   /* protected override void OnManipulationDelta(ManipulationDeltaEventArgs e)
     {
         base.OnManipulationDelta(e);    //如果没有这一行则不会触发ManipulationCompleted事件??
         e.Handled = true;
         //手还在屏幕上，使用精确滚动
         _isAccuracyControl = true;
         double deltaY = -e.DeltaManipulation.Translation.Y;
-        _targetOffset = Math.Clamp(_targetOffset + deltaY, 0, ScrollableHeight);
+        _targetOffset = Math.Clamp(_currentOffset + deltaY, 0, ScrollableHeight);
         // 记录最后一次速度
         _lastTouchVelocity = -e.Velocities.LinearVelocity.Y;
 
         if (!_isRenderingHooked)
         {
+            _lastTimestamp = Stopwatch.GetTimestamp();
             CompositionTarget.Rendering += OnRendering;
             _isRenderingHooked = true;
         }
@@ -318,16 +338,17 @@ public class MyScrollViewer : ScrollViewer
     {
         base.OnManipulationCompleted(e);
         e.Handled = true;
-        Debug.WriteLine("vel: "+ _lastTouchVelocity);
+        Debug.WriteLine("vel: " + _lastTouchVelocity);
         _targetVelocity = _lastTouchVelocity; // 用系统识别的速度继续滚动
         _isAccuracyControl = false;
 
         if (!_isRenderingHooked)
         {
+            _lastTimestamp = Stopwatch.GetTimestamp();
             CompositionTarget.Rendering += OnRendering;
             _isRenderingHooked = true;
         }
-    }
+    }*/
 
     /// <summary>
     /// 判断MouseWheel事件由鼠标触发还是由触控板触发
@@ -340,6 +361,7 @@ public class MyScrollViewer : ScrollViewer
         var isTouchpadScrolling =
                 e.Delta % Mouse.MouseWheelDeltaForOneLine != 0 ||
                 (tickCount - _lastScrollingTick < 100 && _lastScrollDelta % Mouse.MouseWheelDeltaForOneLine != 0);
+        //Debug.WriteLine(e.Delta + "  " + e.Timestamp + "  ==>" + isTouchpadScrolling);
         _lastScrollDelta = e.Delta;
         _lastScrollingTick = e.Timestamp;
         return isTouchpadScrolling;
@@ -353,12 +375,16 @@ public class MyScrollViewer : ScrollViewer
         _isAccuracyControl = IsTouchpadScroll(e);
 
         if (_isAccuracyControl)
+        {
+            _targetVelocity = 0; // 防止下一次触发缓动模型时继承没有消除的速度，造成滚动异常
             _targetOffset = Math.Clamp(_currentOffset - e.Delta, 0, ScrollableHeight);
+        }
         else
             _targetVelocity += -e.Delta * VelocityFactor;// 鼠标滚动，叠加速度（惯性滚动）
 
         if (!_isRenderingHooked)
         {
+            _lastTimestamp = Stopwatch.GetTimestamp();
             CompositionTarget.Rendering += OnRendering;
             _isRenderingHooked = true;
         }
@@ -366,10 +392,18 @@ public class MyScrollViewer : ScrollViewer
 
     private void OnRendering(object? sender, EventArgs e)
     {
+        // 计算时间增量
+        long currentTimestamp = Stopwatch.GetTimestamp();
+        double deltaTime = (double)(currentTimestamp - _lastTimestamp) / Stopwatch.Frequency;
+        _lastTimestamp = currentTimestamp;
+
+        double timeFactor = deltaTime / TargetFrameTime;
+
         if (_isAccuracyControl)
         {
-            // 精确滚动：Lerp 逼近目标
-            _currentOffset += (_targetOffset - _currentOffset) * LerpFactor;
+            // 精确滚动：Lerp 逼近目标（使用时间因子调整）
+            double lerpAmount = 1.0 - Math.Pow(1.0 - LerpFactor, timeFactor);
+            _currentOffset += (_targetOffset - _currentOffset) * lerpAmount;
 
             // 如果已经接近目标，就停止
             if (Math.Abs(_targetOffset - _currentOffset) < 0.5)
@@ -380,7 +414,7 @@ public class MyScrollViewer : ScrollViewer
         }
         else
         {
-            // 缓动滚动：速度衰减模拟
+            // 缓动滚动：速度衰减模拟（使用时间因子调整）
             if (Math.Abs(_targetVelocity) < 0.1)
             {
                 _targetVelocity = 0;
@@ -388,8 +422,11 @@ public class MyScrollViewer : ScrollViewer
                 return;
             }
 
-            _targetVelocity *= Friction;
-            _currentOffset = Math.Clamp(_currentOffset + _targetVelocity * (1.0 / 60), 0, ScrollableHeight);
+            // 使用时间因子调整摩擦力衰减
+            _targetVelocity *= Math.Pow(Friction, timeFactor);
+
+            // 根据实际时间计算偏移量
+            _currentOffset = Math.Clamp(_currentOffset + _targetVelocity * (timeFactor / 24), 0, ScrollableHeight);
         }
 
         InternalScrollToVerticalOffset(_currentOffset);
@@ -402,11 +439,11 @@ public class MyScrollViewer : ScrollViewer
         _isInternalScrollChange = false;
     }
 
+
     private void StopRendering()
     {
         CompositionTarget.Rendering -= OnRendering;
         _isRenderingHooked = false;
     }
 }
-
 ```
