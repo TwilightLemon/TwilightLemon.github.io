@@ -22,6 +22,12 @@
 > [tengkaize](https://github.com/tengkaize)  
 > 行走的Cpp Reference, 全过程全栈大佬
 
+> [Swaggy Macro](https://b.ncii.cn/)  
+全栈AI
+"是一名 游戏玩家、独立开发者、博主、前端开发工程师、后端开发工程师、客户端开发工程师、反正就是全干工程师，为什么叫 卖烤肉 呢？其实是 Macro，但因为江苏第一码——人送外号冷群王，他这么叫我，所以我也叫 卖烤肉。"
+
+> [Tim's Blog](https://blog.timxs.com/)  
+"代码慢慢写，路慢慢走"
 ...
 
 ## 所在的组织
