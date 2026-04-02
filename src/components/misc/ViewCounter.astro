@@ -14,7 +14,7 @@ const { slug, tip = "访问量" } = Astro.props;
     document.querySelectorAll(".view-counter-article").forEach(async (el) => {
         try {
             const resp = await fetch(
-                `https://api.twlmgatito.cn/counter/${encodeURIComponent(el.dataset.id)}`,
+                `https://api.twlmgatito.com/counter/${encodeURIComponent(el.dataset.id)}`,
             );
             el.textContent = (await resp.json()).count;
         } catch {
