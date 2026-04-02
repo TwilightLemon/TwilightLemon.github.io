@@ -11,7 +11,7 @@
  - 📫 How to reach me?  
      QQ: ```echo "MjcyODU3ODk1Ngo=" | base64 -d``` TwilightLemon  
      Email: cz241126@live.com  
-     Blog: https://blog.twlmgatito.cn/
+     Blog: https://blog.twlmgatito.com/
    
  - 😄 Interest  
      Studying delights me.  
